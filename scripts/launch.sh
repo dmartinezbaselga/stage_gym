@@ -14,5 +14,5 @@ pidDQN=0
 
 launch_file=stage.launch
 rm -rf /home/diego/.ros/log
-roslaunch stage_ros_dovs $launch_file 
+roslaunch stage_gym $launch_file 
 # for i in $(seq $1)

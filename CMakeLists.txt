@@ -19,6 +19,11 @@ find_package(stage REQUIRED)
 
 find_package(RVO REQUIRED)
 
+add_message_files(
+  FILES
+  poses_list.msg
+)
+
 add_service_files(
   FILES
   teleport.srv

@@ -3,12 +3,12 @@ speedup 5
 define topurg ranger
 (
   sensor( 			
-    range [ 0.0  30.0 ]
+    range [ 0.0  20.0 ]
     #fov 180
     #samples 360    
-    fov 360
-    samples 720
-    #samples 1080
+    fov 270
+   # samples 270
+    samples 1080
   )
   # generic model properties
   color "black"
@@ -167,11 +167,12 @@ floorplan
 )
 
 # throw in a robot
-erratic( pose [ 2.61233 -0.954499 0.000 -1.99708 ] name "robot_0" color "red")
-erratic_passive( pose [ -0.590585 0.0137931 0.000 -112.116 ] name "orca_1" color "black")
-erratic_passive( pose [ -0.0463293 0.570888 0.000 1.05692 ] name "orca_2" color "black")
-erratic_passive( pose [ 2.75724 -2.82427 0.000 68.1767 ] name "orca_3" color "black")
-erratic_passive( pose [ 1.12453 0.576772 0.000 -41.2538 ] name "orca_4" color "black")
-erratic_passive( pose [ -2.63252 0.700952 0.000 12.6863 ] name "orca_5" color "black")
-erratic_passive( pose [ -0.559636 -1.06768 0.000 -51.7886 ] name "orca_6" color "black")
-target( pose [ -1.450818 0.186262 0.000 0.000 ] name "target_0" color "red")
+erratic( pose [ -1.93252 1.17936 0.000 -108.954 ] name "robot_0" color "red")
+erratic_passive( pose [ 0.801397 2.89128 0.000 85.2785 ] name "orca_1" color "black")
+erratic_passive( pose [ 2.91518 2.9606 0.000 -170.923 ] name "orca_2" color "black")
+erratic_passive( pose [ 0.3393 0.457264 0.000 -122.865 ] name "orca_3" color "black")
+erratic_passive( pose [ 1.40635 0.482977 0.000 -128.893 ] name "orca_4" color "black")
+erratic_passive( pose [ 1.31704 -0.418777 0.000 -59.9246 ] name "orca_5" color "black")
+erratic_passive( pose [ -0.182382 0.90668 0.000 -149.245 ] name "orca_6" color "black")
+erratic_passive( pose [ 2.78024 -1.46354 0.000 -39.1548 ] name "orca_7" color "black")
+target( pose [ 2.874414 -0.718210 0.000 0.000 ] name "target_0" color "red")

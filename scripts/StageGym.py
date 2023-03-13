@@ -9,7 +9,7 @@ from std_srvs.srv import Empty
 from typing import Any, Dict, Optional, Union
 import os
 from collections import namedtuple
-from stage_ros_dovs.srv import *
+from stage_gym.srv import *
 import random
 from geometry_msgs.msg import PoseWithCovarianceStamped
 import tf.transformations

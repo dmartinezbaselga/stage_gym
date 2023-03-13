@@ -58,9 +58,10 @@
 #include <std_msgs/UInt8.h>
 
 #include <std_srvs/Empty.h>
-#include <stage_ros_dovs/teleport.h>
-#include <stage_ros_dovs/step_by_step.h>
+#include <stage_gym/teleport.h>
+#include <stage_gym/step_by_step.h>
 #include "tf/transform_broadcaster.h"
+#include <stage_gym/poses_list.h>
 
 #define USAGE "stageros <worldfile>"
 // #define STAGE "stage"
@@ -142,7 +143,8 @@ private:
     ros::Subscriber cmdvel_sub; 
   };
   
-  
+  ros::Publisher ground_truth_orca_pub;
+
   // Used to remember initial poses for soft reset
   std::vector<Stg::ModelPosition *> positionmodels;  
   std::vector<Stg::Pose> initial_poses;
@@ -220,8 +222,8 @@ public:
   
   // Service callback for soft reset
   bool cb_reset_srv(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
-  bool teleport_service(stage_ros_dovs::teleport::Request& request, stage_ros_dovs::teleport::Response& response);
-  bool cb_pause_srv(stage_ros_dovs::step_by_step::Request& request, stage_ros_dovs::step_by_step::Response& response);
+  bool teleport_service(stage_gym::teleport::Request& request, stage_gym::teleport::Response& response);
+  bool cb_pause_srv(stage_gym::step_by_step::Request& request, stage_gym::step_by_step::Response& response);
  
   // The main simulator object
   Stg::World* world;
@@ -257,7 +259,7 @@ void StageNode::initializeOrca(){
 }
 
 bool
-StageNode::cb_pause_srv(stage_ros_dovs::step_by_step::Request& request, stage_ros_dovs::step_by_step::Response& response)
+StageNode::cb_pause_srv(stage_gym::step_by_step::Request& request, stage_gym::step_by_step::Response& response)
 {
   // boost::mutex::scoped_lock lock(msg_lock);  
   if (request.pause){
@@ -419,6 +421,7 @@ StageNode::StageNode(int argc, char** argv, bool gui, const char* fname )
 
     n_.setParam("/use_sim_time", true);	
     clock_pub_ = n_.advertise<rosgraph_msgs::Clock>("/clock", 10);
+    ground_truth_orca_pub = n_.advertise<stage_gym::poses_list>("/poses_orca_agents", 10);
 
     // advertising reset service
     reset_srv_ = n_.advertiseService("reset_positions", &StageNode::cb_reset_srv, this);
@@ -435,14 +438,14 @@ StageNode::~StageNode()
   // this is not a problem right now, since this is destroyed only at exit.
 }
 
-bool StageNode::teleport_service(stage_ros_dovs::teleport::Request& request, stage_ros_dovs::teleport::Response& response){
+bool StageNode::teleport_service(stage_gym::teleport::Request& request, stage_gym::teleport::Response& response){
     // printf("Aquiring mutex\n");
     // if (request.stop_world){
 
     // }
     // boost::mutex::scoped_lock lock(msg_lock);
         this->world->Stop();
-        sleep(3);
+        sleep(1);
     for (size_t r = 0; r < this->positionmodels.size(); r++) {
         // this->positionmodels->SetPoseSafe(Stg::Pose(15+r, 15+r, 0, 0));
         this->positionmodels[r]->SetPose(Stg::Pose(15+r, 15+r, 0, 0));
@@ -574,10 +577,15 @@ void StageNode::PositionCallback( Stg::ModelPosition* mod, Position* p )
         sim->setAgentPrefVelocity(i, RVO::Vector2(orca_vec[i].getVx(),orca_vec[i].getVy()));
       }
       sim->doStep();
+      stage_gym::poses_list poses_list_msg;
       for (int i = 0; i<orca_robots; i++){
         RVO::Vector2 vel = sim->getAgentVelocity(i);
+        RVO::Vector2 pos = sim->getAgentPosition(i);
         this->positionmodels[extra_robots+i]->SetSpeed(Stg::Velocity(vel.x(),vel.y(),0,0));
+        poses_list_msg.x_vec.push_back(pos.x());
+        poses_list_msg.y_vec.push_back(pos.y());
       }
+      ground_truth_orca_pub.publish(poses_list_msg);
     }
     orca_counter = (orca_counter + 1) % orca_robots;
   }

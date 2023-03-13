@@ -282,12 +282,12 @@ int main(int argc, char *argv[]){
     f_world_out << targets_world;
 
     if (scenario != ""){
-        f_stage_out << "<node name=\"map_server\" pkg=\"map_server\" type=\"map_server\" args=\"$(find stage_ros_dovs)/world/simple_" + scenario + ".yaml\" required=\"true\"/>" << endl;
+        f_stage_out << "<node name=\"map_server\" pkg=\"map_server\" type=\"map_server\" args=\"$(find stage_gym)/world/simple_" + scenario + ".yaml\" required=\"true\"/>" << endl;
     }
     else{
-        f_stage_out << "<node name=\"map_server\" pkg=\"map_server\" type=\"map_server\" args=\"$(find stage_ros_dovs)/world/simple.yaml\" required=\"true\"/>" << endl;
+        f_stage_out << "<node name=\"map_server\" pkg=\"map_server\" type=\"map_server\" args=\"$(find stage_gym)/world/simple.yaml\" required=\"true\"/>" << endl;
     }
-    // f_stage_out << "<node name=\"rviz\" pkg=\"rviz\" type=\"rviz\" args=\"-d $(find stage_ros_dovs)/rviz/amcl_pose.rviz\"/>" << endl;
+    // f_stage_out << "<node name=\"rviz\" pkg=\"rviz\" type=\"rviz\" args=\"-d $(find stage_gym)/rviz/amcl_pose.rviz\"/>" << endl;
     f_stage_out << "</launch>" << endl;
 
     return 0;

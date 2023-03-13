@@ -3,12 +3,12 @@
 
 <param name="/use_sim_time" value="true"/>
 
-<node name="rviz" pkg="rviz" type="rviz" args="-d $(find stage_ros_dovs)/rviz/stage.rviz"/>
+<node name="rviz" pkg="rviz" type="rviz" args="-d $(find stage_gym)/rviz/stage.rviz"/>
 
-<node name="stage_ros_dovs" pkg="stage_ros_dovs" type="stageros" args="$(find stage_ros_dovs)/world/basic.world"  output="screen" required="true">
+<node name="stage_gym" pkg="stage_gym" type="stageros" args="$(find stage_gym)/world/basic.world"  output="screen" required="true">
 		<remap from="base_scan" to="scan" />
 		<param name="step_by_step"               value="true"/>
-<param name="orca_robots" value="6"/>
+<param name="orca_robots" value="7"/>
 </node>
 <group ns="robot_0">
 <node name="amcl" pkg="amcl" type="amcl" output="screen">
@@ -20,9 +20,9 @@
 <remap from="static_map" to="/static_map"/>
 <remap from="map" to="/map"/>
 <!-- Initial position -->
-<param name="initial_pose_x" value="2.61233" />
-<param name="initial_pose_y" value="-0.954499" />
-<param name="initial_pose_a" value="-0.0348555" />
+<param name="initial_pose_x" value="-1.93252" />
+<param name="initial_pose_y" value="1.17936" />
+<param name="initial_pose_a" value="-1.90161" />
 <!-- amcl specific -->
 <param name="odom_model_type"           value="diff"/>
 <param name="gui_publish_rate"          value="10.0"/>
@@ -54,5 +54,5 @@
 <param name="recovery_alpha_fast"       value="0.1"/>
 </node>
 </group>
-<node name="map_server" pkg="map_server" type="map_server" args="$(find stage_ros_dovs)/world/simple.yaml" required="true"/>
+<node name="map_server" pkg="map_server" type="map_server" args="$(find stage_gym)/world/simple.yaml" required="true"/>
 </launch>

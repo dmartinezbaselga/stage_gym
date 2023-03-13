@@ -52,8 +52,8 @@
 #include <std_msgs/UInt8.h>
 
 #include <std_srvs/Empty.h>
-#include <stage_ros_dovs/teleport.h>
-#include <stage_ros_dovs/step_by_step.h>
+#include <stage_gym/teleport.h>
+#include <stage_gym/step_by_step.h>
 #include "tf/transform_broadcaster.h"
 
 #define USAGE "stageros <worldfile>"
@@ -171,9 +171,9 @@ public:
     // Service callback for soft reset
     bool cb_reset_srv(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response);
     
-    bool cb_unfreeze_srv(stage_ros_dovs::step_by_step::Request& request, stage_ros_dovs::step_by_step::Response& response);
+    bool cb_unfreeze_srv(stage_gym::step_by_step::Request& request, stage_gym::step_by_step::Response& response);
 
-    bool teleport_service(stage_ros_dovs::teleport::Request& request, stage_ros_dovs::teleport::Response& response);
+    bool teleport_service(stage_gym::teleport::Request& request, stage_gym::teleport::Response& response);
 
     // The main simulator object
     Stg::World* world;
@@ -270,7 +270,7 @@ StageNode::cb_reset_srv(std_srvs::Empty::Request& request, std_srvs::Empty::Resp
 }
 
 bool
-StageNode::cb_unfreeze_srv(stage_ros_dovs::step_by_step::Request& request, stage_ros_dovs::step_by_step::Response& response)
+StageNode::cb_unfreeze_srv(stage_gym::step_by_step::Request& request, stage_gym::step_by_step::Response& response)
 {
   boost::mutex::scoped_lock lock(msg_lock);  
   frozen = request.freeze;
@@ -441,7 +441,7 @@ StageNode::UpdateWorld()
     return this->world->UpdateAll();
 }
 
-bool StageNode::teleport_service(stage_ros_dovs::teleport::Request& request, stage_ros_dovs::teleport::Response& response){
+bool StageNode::teleport_service(stage_gym::teleport::Request& request, stage_gym::teleport::Response& response){
     // printf("Aquiring mutex\n");
     boost::mutex::scoped_lock lock(msg_lock);
     // printf("Before for\n");
